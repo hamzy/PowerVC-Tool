@@ -25,3 +25,10 @@ jobs:
         goos: linux
         goarch: amd64
         ldflags: "-X main.version=${{ env.PROGRAM_VERSION }} -X main.release=${{ env.PROGRAM_RELEASE }}"
+
+    - uses: wangyoucao577/go-release-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: linux
+        goarch: ppc64le
+        ldflags: "-X main.version=${{ env.PROGRAM_VERSION }} -X main.release=${{ env.PROGRAM_RELEASE }}"
