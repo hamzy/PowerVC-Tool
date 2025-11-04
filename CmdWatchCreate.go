@@ -18,6 +18,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"strings"
 
@@ -95,6 +96,11 @@ func watchCreateClusterCommand(watchCreateClusterFlags *flag.FlagSet, args []str
 	}
 	if ptrInstallerRsa == nil || *ptrInstallerRsa == "" {
 		return fmt.Errorf("Error: --bastionRsa not specified")
+	}
+
+	_, err = ioutil.ReadFile(*ptrMetadata)
+	if err != nil {
+		return fmt.Errorf("Error: Opening metadata file %s had %v", *ptrMetadata, err)
 	}
 
 	robjsFuncs = make([]NewRunnableObjectsEntry, 0)
