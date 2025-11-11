@@ -396,13 +396,17 @@ func updateBastionInformations(ctx context.Context, cloud string, bastionInforma
 
 func getAllServers(ctx context.Context, connCompute *gophercloud.ServiceClient) (allServers []servers.Server, err error) {
 	var (
-		pager pagination.Page
+		pager    pagination.Page
+		duration time.Duration
 	)
+
+	duration = leftInContext(ctx)
+	log.Debugf("getAllServers: duration = %v", duration)
 
 	backoff := wait.Backoff{
 		Duration: 30 * time.Minute,
 		Factor:   1.1,
-		Cap:      leftInContext(ctx),
+		Cap:      duration,
 		Steps:    math.MaxInt32,
 	}
 
