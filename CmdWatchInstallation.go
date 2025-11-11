@@ -220,7 +220,7 @@ func watchInstallationCommand(watchInstallationFlags *flag.FlagSet, args []strin
 
 		if enableDhcpd {
 			filename := "/tmp/dhcpd.conf"
-			err = dhcpdConf(ctx, filename, *ptrCloud, *ptrDomainName)
+			err = dhcpdConf(ctx, filename, *ptrCloud, *ptrDomainName, "HACK2")
 			if err != nil {
 				return err
 			}
@@ -535,7 +535,7 @@ func findIpAddress(server servers.Server) (string, string, error) {
 	return "", "", nil
 }
 
-func dhcpdConf(ctx context.Context, filename string, cloud string, domainName string) error {
+func dhcpdConf(ctx context.Context, filename string, cloud string, domainName string, location string) error {
 	var (
 		connCompute *gophercloud.ServiceClient
 		allServers  []servers.Server
@@ -582,11 +582,22 @@ func dhcpdConf(ctx context.Context, filename string, cloud string, domainName st
 	fmt.Fprintf(file, "default-lease-time 2678400;\n")
 	fmt.Fprintf(file, "max-lease-time 2678400;\n")
 	fmt.Fprintf(file, "\n")
-	fmt.Fprintf(file, "subnet 10.20.176.0 netmask 255.255.240.0 {\n")
-	fmt.Fprintf(file, "   interface env2;\n")
-	fmt.Fprintf(file, "   option routers 10.20.176.1;\n")
-	fmt.Fprintf(file, "   option subnet-mask 255.255.240.0;\n")
-	fmt.Fprintf(file, "   option domain-name-servers 10.0.10.4, 9.9.9.9;\n")
+	switch (location) {
+	case "HACK1":
+		fmt.Fprintf(file, "subnet 10.20.176.0 netmask 255.255.240.0 {\n")
+		fmt.Fprintf(file, "   interface env2;\n")
+		fmt.Fprintf(file, "   option routers 10.20.176.1;\n")
+		fmt.Fprintf(file, "   option subnet-mask 255.255.240.0;\n")
+		fmt.Fprintf(file, "   option domain-name-servers 10.0.10.4, 9.9.9.9;\n")
+	case "HACK2":
+		fmt.Fprintf(file, "subnet 10.130.32.0 netmask 255.255.240.0 {\n")
+		fmt.Fprintf(file, "   interface env2;\n")
+		fmt.Fprintf(file, "   option routers 10.130.32.1;\n")
+		fmt.Fprintf(file, "   option subnet-mask 255.255.240.0;\n")
+		fmt.Fprintf(file, "   option domain-name-servers 10.2.70.215, 10.11.5.160, 8.8.8.8;\n")
+	default:
+		return fmt.Errorf("Unknown location %s", location)
+	}
 	fmt.Fprintf(file, "   option domain-name \"%s\";\n", domainName)
 	fmt.Fprintf(file, "   ignore unknown-clients;\n")
 	fmt.Fprintf(file, "#  update-static-leases true;\n")
