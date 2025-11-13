@@ -33,7 +33,7 @@ func watchCreateClusterCommand(watchCreateClusterFlags *flag.FlagSet, args []str
 		ptrMetadata        *string
 		ptrKubeConfig      *string
 		ptrBastionUsername *string
-		ptrInstallerRsa    *string
+		ptrBastionRsa      *string
 		ptrBaseDomain      *string
 		ptrCisInstanceCRN  *string
 		ptrShouldDebug     *string
@@ -55,7 +55,7 @@ func watchCreateClusterCommand(watchCreateClusterFlags *flag.FlagSet, args []str
 	ptrMetadata = watchCreateClusterFlags.String("metadata", "", "The location of the metadata.json file")
 	ptrKubeConfig = watchCreateClusterFlags.String("kubeconfig", "", "The KUBECONFIG file")
 	ptrBastionUsername = watchCreateClusterFlags.String("bastionUsername", "", "The username of the bastion VM to use")
-	ptrInstallerRsa = watchCreateClusterFlags.String("bastionRsa", "", "The RSA filename for the bastion VM to use")
+	ptrBastionRsa = watchCreateClusterFlags.String("bastionRsa", "", "The RSA filename for the bastion VM to use")
 	ptrBaseDomain = watchCreateClusterFlags.String("baseDomain", "", "The DNS base name to use")
 	ptrCisInstanceCRN = watchCreateClusterFlags.String("cisInstanceCRN", "", "The IBMCloud DNS CRN to use")
 	ptrShouldDebug = watchCreateClusterFlags.String("shouldDebug", "false", "Should output debug output")
@@ -94,7 +94,7 @@ func watchCreateClusterCommand(watchCreateClusterFlags *flag.FlagSet, args []str
 	if ptrBastionUsername == nil || *ptrBastionUsername == "" {
 		return fmt.Errorf("Error: --bastionUsername not specified")
 	}
-	if ptrInstallerRsa == nil || *ptrInstallerRsa == "" {
+	if ptrBastionRsa == nil || *ptrBastionRsa == "" {
 		return fmt.Errorf("Error: --bastionRsa not specified")
 	}
 
@@ -125,7 +125,7 @@ func watchCreateClusterCommand(watchCreateClusterFlags *flag.FlagSet, args []str
 	}
 	log.Debugf("metadata = %+v", metadata)
 
-	services, err = NewServices(metadata, apiKey, *ptrKubeConfig, *ptrCloud, *ptrBastionUsername, *ptrInstallerRsa, *ptrBaseDomain, *ptrCisInstanceCRN)
+	services, err = NewServices(metadata, apiKey, *ptrKubeConfig, *ptrCloud, *ptrBastionUsername, *ptrBastionRsa, *ptrBaseDomain, *ptrCisInstanceCRN)
 	if err != nil {
 		return fmt.Errorf("Error: Could not create a Services object (%s)!\n", err)
 	}

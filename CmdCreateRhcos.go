@@ -67,6 +67,7 @@ func createRhcosCommand(createRhcosFlags *flag.FlagSet, args []string) error {
 	ptrNetworkName = createRhcosFlags.String("networkName", "", "The name of the network to use")
 	ptrPasswdHash = createRhcosFlags.String("passwdHash", "", "The password hash of the core user")
 	ptrSshPublicKey = createRhcosFlags.String("sshPublicKey", "", "The contents of the ssh public key to use")
+	// NOTE: This is optional
 	ptrDomainName = createRhcosFlags.String("domainName", "", "The DNS domain to use")
 	ptrShouldDebug = createRhcosFlags.String("shouldDebug", "false", "Should output debug output")
 
@@ -137,7 +138,6 @@ func createRhcosCommand(createRhcosFlags *flag.FlagSet, args []string) error {
 				*ptrNetworkName,
 				"",			// No ssh-key
 				*ptrRhcosName,
-				*ptrDomainName,
 				userData,
 			)
 			if err != nil {

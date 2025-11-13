@@ -75,6 +75,7 @@ func createBastionCommand(createBastionFlags *flag.FlagSet, args []string) error
 	ptrImageName = createBastionFlags.String("imageName", "", "The name of the image to use")
 	ptrNetworkName = createBastionFlags.String("networkName", "", "The name of the network to use")
 	ptrSshKeyName = createBastionFlags.String("sshKeyName", "", "The name of the ssh keypair to use")
+	// NOTE: This is optional
 	ptrDomainName = createBastionFlags.String("domainName", "", "The DNS domain to use")
 	ptrShouldDebug = createBastionFlags.String("shouldDebug", "false", "Should output debug output")
 
@@ -145,7 +146,6 @@ func createBastionCommand(createBastionFlags *flag.FlagSet, args []string) error
 				*ptrNetworkName,
 				*ptrSshKeyName,
 				*ptrBastionName,
-				*ptrDomainName,
 				nil,
 			)
 			if err != nil {
@@ -180,7 +180,7 @@ func createBastionCommand(createBastionFlags *flag.FlagSet, args []string) error
 	return err
 }
 
-func createServer(ctx context.Context, cloudName string, flavorName string, imageName string, networkName string, sshKeyName string, bastionName string, domainName string, userData []byte) error {
+func createServer(ctx context.Context, cloudName string, flavorName string, imageName string, networkName string, sshKeyName string, bastionName string, userData []byte) error {
 	var (
 		flavor           flavors.Flavor
 		image            images.Image
