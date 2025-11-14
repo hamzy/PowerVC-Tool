@@ -126,7 +126,7 @@ func (vms *VMs) ClusterStatus() {
 		var (
 			macAddress         string
 			ipAddress          string
-			sshAlive           = "NO"
+			sshAlive           = "DEAD"
 			hypervisor         hypervisors.Hypervisor
 		)
 
@@ -144,10 +144,10 @@ func (vms *VMs) ClusterStatus() {
 
 		outb, err := keyscanServer(ctx, ipAddress, true)
 		if err == nil && len(outb) != 0 {
-			sshAlive = "YES"
+			sshAlive = "ALIVE"
 		}
 
-		fmt.Printf("%s: %s has status (%s), power state (%s), MAC address (%s), IP address (%s), and (%s) ssh status\n",
+		fmt.Printf("%s: %s has status (%s), power state (%s), MAC address (%s), IP address (%s), and ssh status (%s)\n",
 			VMsName,
 			server.Name,
 			server.Status,
