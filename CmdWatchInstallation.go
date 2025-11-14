@@ -175,7 +175,7 @@ func watchInstallationCommand(watchInstallationFlags *flag.FlagSet, args []strin
 
 	fmt.Fprintf(os.Stderr, "Program version is %v, release = %v\n", version, release)
 
-	ctx, cancel = context.WithTimeout(context.TODO(), 15*time.Minute)
+	ctx, cancel = context.WithTimeout(context.TODO(), 5*time.Minute)
 	defer cancel()
 
 	connCompute, err = NewServiceClient(ctx, "compute", DefaultClientOpts(*ptrCloud))
@@ -198,7 +198,7 @@ func watchInstallationCommand(watchInstallationFlags *flag.FlagSet, args []strin
 	for true {
 		log.Debugf("Waking up")
 
-		ctx, cancel = context.WithTimeout(context.TODO(), 15*time.Minute)
+		ctx, cancel = context.WithTimeout(context.TODO(), 1*time.Hour)
 		defer cancel()
 
 		allServers, err = getAllServers(ctx, connCompute)
@@ -428,7 +428,7 @@ func getAllServers(ctx context.Context, connCompute *gophercloud.ServiceClient) 
 	log.Debugf("getAllServers: duration = %v", duration)
 
 	backoff := wait.Backoff{
-		Duration: 30 * time.Minute,
+		Duration: 1 * time.Minute,
 		Factor:   1.1,
 		Cap:      duration,
 		Steps:    math.MaxInt32,

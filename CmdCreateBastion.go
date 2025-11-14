@@ -545,7 +545,7 @@ func keyscanServer(ctx context.Context, ipAddress string) ([]byte, error) {
 	)
 
 	backoff := wait.Backoff{
-		Duration: 15 * time.Second,
+		Duration: 1 * time.Second,
 		Factor:   1.1,
 		Cap:      leftInContext(ctx),
 		Steps:    math.MaxInt32,
