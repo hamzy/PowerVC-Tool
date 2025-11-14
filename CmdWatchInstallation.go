@@ -420,26 +420,24 @@ func updateBastionInformations(ctx context.Context, cloud string, bastionInforma
 
 func getAllServers(ctx context.Context, connCompute *gophercloud.ServiceClient) (allServers []servers.Server, err error) {
 	var (
-		pager    pagination.Page
 		duration time.Duration
+		pager    pagination.Page
 	)
-
-	duration = leftInContext(ctx)
-	log.Debugf("getAllServers: duration = %v", duration)
 
 	backoff := wait.Backoff{
 		Duration: 1 * time.Minute,
 		Factor:   1.1,
-		Cap:      duration,
+		Cap:      leftInContext(ctx),
 		Steps:    math.MaxInt32,
 	}
 
 	err = wait.ExponentialBackoffWithContext(ctx, backoff, func(context.Context) (bool, error) {
 		var (
-			err2 error
+			err2     error
 		)
 
-		log.Debugf("getAllServers: calling servers.List")
+		duration = leftInContext(ctx)
+		log.Debugf("getAllServers: duration = %v, calling servers.List", duration)
 		pager, err2 = servers.List(connCompute, nil).AllPages(ctx)
 		if err2 != nil {
 			log.Debugf("getAllServers: servers.List returned error %v", err2)
